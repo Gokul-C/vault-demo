@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault-demo
+  labels:
+    app: orgchart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orgchart
+  template:
+    metadata:
+      labels:
+        app: orgchart
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'vault-demo'
+        vault.hashicorp.com/agent-inject-secret-config.json: 'tekton/data/database/vault-demo'
+        vault.hashicorp.com/secret-volume-path-config.json: '/home/gokul/'
+        vault.hashicorp.com/agent-inject-template-config.json: |
+          {{- with secret "tekton/data/database/vault-demo" -}}
+          {
+            "auths": {
+              "https://index.docker.io/v1/": {
+                "auth": "{{ .Data.data.username }}"
+              }
+            }
+          }
+          {{- end -}}
+    spec:
+      serviceAccountName: vault-demo
+      containers:
+      - name: orgchart
+        image: jweissig/app:0.0.1
