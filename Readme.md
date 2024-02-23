@@ -27,3 +27,10 @@ vault write auth/kubernetes/role/vault-demo \
 kubectl create sa vault-demo
 ```
 # 6. Apply the deployment
+```
+kubectl apply -f https://raw.githubusercontent.com/Gokul-C/vault-demo/main/vault-deploy.yaml
+```
+# 7. Validate the secrets inside the pod
+```
+kubectl exec -it vault-demo-7d7d4bc754-5nqvq -- cat /home/gokul/config.json
+```
