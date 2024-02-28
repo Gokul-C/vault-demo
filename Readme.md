@@ -20,7 +20,7 @@ vault write auth/kubernetes/role/vault-demo \
       bound_service_account_names=vault-demo \
       bound_service_account_namespaces=vault-demo \
       policies=vault-demo \
-      ttl=24h
+     
 ```
 # 5. Create SA as we specified in the role
 ```
